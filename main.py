@@ -1,3 +1,5 @@
+import random
+
 import pygame
 
 pygame.init()
@@ -14,22 +16,32 @@ pygame.display.set_icon(icon)
 player_image = pygame.image.load('player.png')
 player_x = 370
 player_y = 480
-
 player_x_change = 0
 player_y_change = 0
 
 speed = 4
+
+# Enemy
+enemy_image = pygame.image.load('alien.png')
+enemy_x = random.randint(0, 800)
+enemy_y = random.randint(50, 150)
+enemy_x_change = 0
+enemy_y_change = 0
 
 
 def player(x, y):
     screen.blit(player_image, (x, y))
 
 
+def enemy(x, y):
+    screen.blit(enemy_image, (x, y))
+
+
 # Game Loop
 running = True
 while running:
     # RGB - (Red, Green, Blue)
-    screen.fill((255, 255, 0))
+    screen.fill((155, 155, 0))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -64,4 +76,5 @@ while running:
         player_y = 536
 
     player(player_x, player_y)
+    enemy(enemy_x, enemy_y)
     pygame.display.update()
