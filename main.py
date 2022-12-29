@@ -15,6 +15,11 @@ player_image = pygame.image.load('player.png')
 player_x = 370
 player_y = 480
 
+player_x_change = 0
+player_y_change = 0
+
+speed = 4
+
 
 def player(x, y):
     screen.blit(player_image, (x, y))
@@ -30,5 +35,23 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+        # If keystroke is pressed, check weather it's right or left.
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                player_x_change = -1 * speed
+            if event.key == pygame.K_RIGHT:
+                player_x_change = speed
+            if event.key == pygame.K_UP:
+                player_y_change = -1 * speed
+            if event.key == pygame.K_DOWN:
+                player_y_change = speed
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                player_x_change = 0
+            if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+                player_y_change = 0
+
+    player_x += player_x_change
+    player_y += player_y_change
     player(player_x, player_y)
     pygame.display.update()
