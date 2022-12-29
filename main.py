@@ -32,6 +32,13 @@ enemy_x_change = 3
 enemy_y_change = 40
 
 
+bullet_image = pygame.image.load('bullet.png')
+bullet_x = 0
+bullet_y = 0
+bullet_y_change = 1
+bullet_state = 'ready'
+
+
 def player(x, y):
     screen.blit(player_image, (x, y))
 
@@ -40,9 +47,15 @@ def enemy(x, y):
     screen.blit(enemy_image, (x, y))
 
 
+def fire_bullet(x, y):
+    global bullet_state  # WHY GLOBAL. Lol
+    bullet_state = 'fire'
+    screen.blit(bullet_image, (x + 16, y + 10))
+
+
 # Game Loop
 running = True
-while running:
+while running:  # noqa
     # RGB - (Red, Green, Blue)
     screen.fill((0, 0, 0))
     screen.blit(background, (0, 0))
@@ -61,6 +74,11 @@ while running:
                 player_y_change = -1 * speed
             if event.key == pygame.K_DOWN:
                 player_y_change = speed
+            if event.key == pygame.K_SPACE:
+                if bullet_state == 'ready':
+                    bullet_x = player_x
+                    bullet_y = player_y
+                    fire_bullet(bullet_x, bullet_y)
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                 player_x_change = 0
@@ -86,6 +104,12 @@ while running:
     elif enemy_x >= 736:
         enemy_x_change = enemy_x_change * -1
         enemy_y += enemy_y_change
+
+    if bullet_state == 'fire':
+        fire_bullet(bullet_x, bullet_y)
+        bullet_y -= bullet_y_change
+    if bullet_y < 0:
+        bullet_state = 'ready'
 
     player(player_x, player_y)
     enemy(enemy_x, enemy_y)
