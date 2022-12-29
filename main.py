@@ -53,6 +53,10 @@ bullet_state = 'ready'
 
 
 score = 0
+font = pygame.font.Font('freesansbold.ttf', 32)
+
+text_x = 10
+text_y = 10
 
 
 def player(x, y):
@@ -76,6 +80,11 @@ def fire_bullet(x, y):
     global bullet_state  # WHY GLOBAL. Lol
     bullet_state = 'fire'
     screen.blit(bullet_image, (x + 16, y + 10))
+
+
+def show_score(x, y):
+    rendered_score = font.render(f'Score: {score}', True, (255, 255, 255))
+    screen.blit(rendered_score, (x, y))
 
 
 # Game Loop
@@ -143,10 +152,10 @@ while running:  # noqa
         if collision:
             bullet_state = 'ready'
             score += 1
-            print(score)
             enemy.respawn()
 
     player(player_x, player_y)
     for enemy in enemies:
         draw_enemy(enemy)
+    show_score(text_x, text_y)
     pygame.display.update()
