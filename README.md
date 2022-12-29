@@ -1,0 +1,2 @@
+# noob-game
+Learning pygame
