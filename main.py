@@ -2,6 +2,7 @@ import math
 import random
 
 import pygame
+from pygame import mixer
 
 pygame.init()
 
@@ -10,6 +11,9 @@ screen = pygame.display.set_mode((800, 600))
 
 # Background
 background = pygame.image.load('background.jpg')
+
+mixer.music.load('Electronic-background-music-90-bpm.mp3')
+mixer.music.play(-1)
 
 # Title and icon
 pygame.display.set_caption('Noob Game')
@@ -32,11 +36,13 @@ class Enemy:
         self.enemy_image = pygame.image.load('alien.png')
         self.enemy_x_change = 3
         self.enemy_y_change = 40
-        self.respawn()
+        self.respawn(play_explosiion=False)
 
-    def respawn(self):
+    def respawn(self, play_explosiion=True):
         self.enemy_x = random.randint(0, 700)
         self.enemy_y = random.randint(50, 150)
+        sound = mixer.Sound('mixkit-short-explosion-1694.wav')
+        sound.play()
 
 
 num_enemies = 6
@@ -110,6 +116,8 @@ while running:  # noqa
                 player_y_change = speed
             if event.key == pygame.K_SPACE:
                 if bullet_state == 'ready':
+                    bullet_sound = mixer.Sound('gun-gunshot-01.mp3')
+                    bullet_sound.play()
                     bullet_x = player_x
                     bullet_y = player_y
                     fire_bullet(bullet_x, bullet_y)
