@@ -6,6 +6,9 @@ from pygame import mixer
 
 pygame.init()
 
+FPS = 60
+clock = pygame.time.Clock()
+
 
 screen = pygame.display.set_mode((800, 600))
 
@@ -120,6 +123,8 @@ while running:  # noqa
 
         # If keystroke is pressed, check weather it's right or left.
         if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                running = False
             if event.key == pygame.K_LEFT:
                 player_x_change = -1 * speed
             if event.key == pygame.K_RIGHT:
@@ -188,3 +193,4 @@ while running:  # noqa
     if show_game_over:
         game_over()
     pygame.display.update()
+    clock.tick(FPS)
