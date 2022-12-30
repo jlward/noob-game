@@ -37,6 +37,7 @@ class Enemy:
         self.enemy_x_change = 3
         self.enemy_y_change = 40
         self.respawn(play_explosiion=False)
+        self.display = True
 
     def respawn(self, play_explosiion=True):
         self.enemy_x = random.randint(0, 700)
@@ -70,6 +71,8 @@ def player(x, y):
 
 
 def draw_enemy(enemy):
+    if not enemy.display:
+        return
     screen.blit(enemy.enemy_image, (enemy.enemy_x, enemy.enemy_y))
 
 
@@ -93,8 +96,19 @@ def show_score(x, y):
     screen.blit(rendered_score, (x, y))
 
 
+def game_over():
+    rendered = font.render('Game Over', True, (255, 255, 255))
+    screen.blit(rendered, (200, 250))
+
+
+def kill_all_enemies():
+    for enemy in enemies:
+        enemy.display = False
+
+
 # Game Loop
 running = True
+show_game_over = False
 while running:  # noqa
     # RGB - (Red, Green, Blue)
     screen.fill((0, 0, 0))
@@ -147,6 +161,11 @@ while running:  # noqa
         elif enemy.enemy_x >= 736:
             enemy.enemy_x_change = enemy.enemy_x_change * -1
             enemy.enemy_y += enemy.enemy_y_change
+        collision = is_collision(enemy.enemy_x, enemy.enemy_y, player_x, player_y)
+        if collision:
+            kill_all_enemies()
+            game_over()
+            show_game_over = True
 
     if bullet_state == 'fire':
         fire_bullet(bullet_x, bullet_y)
@@ -166,4 +185,6 @@ while running:  # noqa
     for enemy in enemies:
         draw_enemy(enemy)
     show_score(text_x, text_y)
+    if show_game_over:
+        game_over()
     pygame.display.update()
